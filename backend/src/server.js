@@ -1,13 +1,18 @@
-const express = require("express");
-const db = require('./config/database');
-
 require("dotenv").config();
+
+const express = require("express");
+const db = require("./config/database");
 
 const app = express();
 
 app.get("/", async (req, res) => {
-  const result = await pool.query("SELECT NOW()");
-  res.json(result.rows);
+  try {
+    const result = await db.query("SELECT NOW()");
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error en servidor" });
+  }
 });
 
 app.listen(3000, () => {
